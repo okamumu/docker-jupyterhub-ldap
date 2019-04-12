@@ -33,8 +33,8 @@ ENV PATH=/opt/conda/bin:$PATH
 RUN mkdir -p /srv/jupyterhub/
 RUN mkdir -p /etc/skel/notebook
 WORKDIR /srv/jupyterhub/
-mkdir -p /etc/skel/.jupyter
-echo "c.NotebookApp.terminado_settings={'shell_command': ['bash']}" > /etc/skel/.jupyter/jupyter_notebook_config.py
+RUN mkdir -p /etc/skel/.jupyter
+RUN echo "c.NotebookApp.terminado_settings={'shell_command': ['bash']}" > /etc/skel/.jupyter/jupyter_notebook_config.py
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     libnss-ldap libpam-ldap ldap-auth-client
