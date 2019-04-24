@@ -1,4 +1,4 @@
-FROM jupyterhub/jupyterhub:latest
+FROM ubuntu:18.04
 
 RUN apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -33,6 +33,9 @@ ENV PATH=/opt/conda/bin:$PATH
 RUN mkdir -p /srv/jupyterhub/
 RUN mkdir -p /etc/skel/notebook
 WORKDIR /srv/jupyterhub/
+
+RUN pip install jupyterhub
+
 RUN mkdir -p /etc/skel/.jupyter
 RUN echo "c.NotebookApp.terminado_settings={'shell_command': ['bash']}" > /etc/skel/.jupyter/jupyter_notebook_config.py
 
