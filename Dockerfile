@@ -52,13 +52,14 @@ RUN jupyter lab build
 
 ENV NB_UID        1000
 ENV NB_USER       jupyter
-ENV NB_HOME       /home/jupyter
 ENV NB_PASSWORD   jupyter
 ENV NB_GID        1000
 ENV NB_GROUP      jupyter
 ENV NB_GRANT_SUDO nopass
 ENV NB_PORT       8000
+ENV NB_VOLUME     /home/jupyter
 
 COPY entrypoint.sh /entrypoint.sh
+COPY adduser.sh /adduser.sh
 
 CMD ["/entrypoint.sh"]
