@@ -1,5 +1,21 @@
 #!/bin/sh
 
+mkdir -p /etc/skel/workspace
+mkdir -p /etc/skel/.jupyter
+echo "c.NotebookApp.terminado_settings={'shell_command': ['bash']}" > /etc/skel/.jupyter/jupyter_notebook_config.py
+
+echo "from oauthenticator.github import LocalGitHubOAuthenticator" >> /srv/jupyterhub/jupyterhub_config.py
+echo "c.JupyterHub.authenticator_class = LocalGitHubOAuthenticator" >> /srv/jupyterhub/jupyterhub_config.py
+echo "c.LocalGitHubOAuthenticator.oauth_callback_url = '$OAUTH_CALLBACK_URL'" >> /srv/jupyterhub/jupyterhub_config.py
+echo "c.LocalGitHubOAuthenticator.client_id = '$GITHUB_CLIENT_ID'" >> /srv/jupyterhub/jupyterhub_config.py
+echo "c.LocalGitHubOAuthenticator.client_secret = '$GITHUB_CLIENT_SECRET'" >> /srv/jupyterhub/jupyterhub_config.py
+echo "c.LocalAuthenticator.create_system_users = True" >> /srv/jupyterhub/jupyterhub_config.py
+echo "c.Authenticator.admin_users = {'$NB_USER'}" >> /srv/jupyterhub/jupyterhub_config.py
+echo "c.JupyterHub.port = $NB_PORT" >> /srv/jupyterhub/jupyterhub_config.py
+echo "c.JupyterHub.admin_access = True" >> /srv/jupyterhub/jupyterhub_config.py
+echo "c.Spawner.default_url = '/lab'" >> /srv/jupyterhub/jupyterhub_config.py
+echo "c.Spawner.notebook_dir = \"~/workspace\"" >> /srv/jupyterhub/jupyterhub_config.py
+
 # create user
 
 groupadd -f -g $NB_GID $NB_GROUP || exit 1
@@ -14,21 +30,6 @@ fi
 mkdir -p $NB_HOME
 chown $NB_USER:$NB_GROUP $NB_HOME
 su - $NB_USER -c "cp -n -r --preserve=mode /etc/skel/. $NB_HOME"
-
-## ldap
-
-echo "base $LDAP_BASE_DN" > /etc/ldap.conf
-echo "uri ldap://$LDAP_SERVER/" >> /etc/ldap.conf
-echo "ldap_version 3" >> /etc/ldap.conf
-echo "rootbinddn cn=manager,$LDAP_BASE_DN" >> /etc/ldap.conf
-echo "pam_password md5" >> /etc/ldap.conf
-echo "nss_initgroups_ignoreusers backup,bin,daemon,games,gnats,irc,libuuid,list,lp,mail,man,news,proxy,root,sshd,sync,sys,syslog,uucp,www-data" >> /etc/ldap.conf
-
-## conf
-
-echo "c.Authenticator.admin_users = {'$NB_USER'}" > /srv/jupyterhub/jupyterhub_config.py
-echo "c.Spawner.notebook_dir = \"~/notebook\"" >> /srv/jupyterhub/jupyterhub_config.py
-echo "c.JupyterHub.admin_access = True" >> /srv/jupyterhub/jupyterhub_config.py
 
 ## jupyterhub
 jupyterhub -f /srv/jupyterhub/jupyterhub_config.py
