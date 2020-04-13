@@ -1,0 +1,27 @@
+
+
+version: '3'
+
+services:
+    jupyterhub:
+        image: okamumu/jupyterhub
+        restart: always
+        hostname: jupyterhub
+        ports:
+            - "8000:8000"
+        volumes:
+            - jupyterhome:/home
+        environment:
+            - NB_USER=admin
+            - NB_UID=1000
+            - NB_PASSWORD=adminpassword
+            - NB_GROUP=jupyter
+            - NB_GID=10000
+            - NB_VOLUME=/home
+            - NB_GRANT_SUDO=nopass
+            - NB_PORT=8000
+            - GITHUB_CLIENT_ID=<client_id>
+            - GITHUB_CLIENT_SECRET=<client_secret>
+            - OAUTH_CALLBACK_URL=<callback_url>
+volumes:
+    jupyterhome:
