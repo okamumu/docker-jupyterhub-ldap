@@ -57,8 +57,7 @@ RUN mkdir -p /srv/jupyterhub/
 WORKDIR /srv/jupyterhub/
 
 RUN jupyter labextension install @jupyterlab/hub-extension
-RUN pip install --upgrade jupyterlab-git && \
-  jupyter lab build
+RUN jupyter labextension install @jupyterlab/git
 
 ENV NB_UID        1000
 ENV NB_USER       jupyter
@@ -71,7 +70,5 @@ ENV NB_VOLUME     /home/jupyter
 
 COPY entrypoint.sh /entrypoint.sh
 COPY adduser.sh /adduser.sh
-COPY install.R /install.R
-RUN Rscript /install.R
 
 CMD ["/entrypoint.sh"]
