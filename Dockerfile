@@ -70,6 +70,7 @@ ENV NB_PORT       8000
 ENV NB_VOLUME     /home/jupyter
 
 COPY entrypoint.sh /entrypoint.sh
+COPY adduser.sh /adduser.sh
 COPY install.R /install.R
 RUN Rscript /install.R
 
