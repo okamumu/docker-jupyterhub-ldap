@@ -17,7 +17,16 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
   libopenblas-dev \
   fonts-dejavu \
   build-essential \
-  gfortran &&\
+  libxml2-dev \
+  libcurl4-openssl-dev \
+  libssl-dev \
+  r-base \
+  gfortran \
+  psmisc \
+  libapparmor1 \
+  libgmp3-dev \
+  libmpfr-dev \
+  libclang-dev &&\
 apt-get clean &&\
 rm -rf /var/lib/apt/lists/*
 
@@ -61,6 +70,7 @@ ENV NB_PORT       8000
 ENV NB_VOLUME     /home/jupyter
 
 COPY entrypoint.sh /entrypoint.sh
-COPY adduser.sh /adduser.sh
+COPY install.R /install.R
+RUN Rscript /install.R
 
 CMD ["/entrypoint.sh"]
