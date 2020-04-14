@@ -41,7 +41,7 @@ RUN wget -q $CONDA -O /tmp/miniconda.sh  && \
     /opt/conda/bin/conda install --yes -c conda-forge \
       python sqlalchemy tornado jinja2 traitlets requests pip pycurl numpy scipy \
       nodejs configurable-http-proxy notebook \
-      jupyterhub jupyterlab==1.2.10 oauthenticator \
+      jupyterhub jupyterlab=1.2.10 oauthenticator \
       && \
     /opt/conda/bin/pip install --upgrade pip && \
     rm /tmp/miniconda.sh
@@ -57,7 +57,8 @@ RUN mkdir -p /srv/jupyterhub/
 WORKDIR /srv/jupyterhub/
 
 RUN jupyter labextension install @jupyterlab/hub-extension
-RUN jupyter labextension install @jupyterlab/git
+RUN pip install --upgrade jupyterlab-git
+RUN jupyter lab build
 
 ENV NB_UID        1000
 ENV NB_USER       jupyter
