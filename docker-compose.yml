@@ -1,4 +1,4 @@
-
+# example for docker-compose
 
 version: '3'
 
@@ -9,6 +9,7 @@ services:
         hostname: jupyterhub
         ports:
             - "8000:8000"
+            - "8888:8888"
         volumes:
             - jupyterhome:/home
         environment:
@@ -20,6 +21,7 @@ services:
             - NB_VOLUME=/home
             - NB_GRANT_SUDO=nopass
             - NB_PORT=8000
+            - RS_Port=8888
             - GITHUB_CLIENT_ID=<client_id>
             - GITHUB_CLIENT_SECRET=<client_secret>
             - OAUTH_CALLBACK_URL=<callback_url>
