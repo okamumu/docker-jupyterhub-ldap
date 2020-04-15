@@ -32,5 +32,8 @@ mkdir -p $NB_VOLUME/$NB_USER
 chown $NB_USER:$NB_GROUP $NB_VOLUME/$NB_USER
 su - $NB_USER -c "cp -n -r --preserve=mode /etc/skel/. $NB_VOLUME/$NB_USER"
 
+# rstudio
+/usr/lib/rstudio-server/bin/rserver --www-port $RS_PORT
+
 ## jupyterhub
 jupyterhub -f /srv/jupyterhub/jupyterhub_config.py

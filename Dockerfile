@@ -2,6 +2,7 @@ FROM ubuntu:18.04
 
 ARG CONDA="https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh"
 ARG JULIA1="https://julialang-s3.julialang.org/bin/linux/x64/1.0/julia-1.0.5-linux-x86_64.tar.gz"
+ARG RSTUDIO_SERVER_DEB="https://download2.rstudio.org/server/trusty/amd64/rstudio-server-1.2.5033-amd64.deb"
 
 RUN apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -10,6 +11,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
   git \
   wget \
   curl \
+  gdebi \
   ca-certificates \
   locales \
   tzdata \
@@ -53,6 +55,10 @@ RUN  mkdir -p /opt/julia1 && \
 
 ENV PATH=/opt/julia1/bin:/opt/conda/bin:$PATH
 
+RUN wget -O /tmp/rstudio.deb $RSTUDIO_SERVER_DEB && \
+      yes | gdebi /tmp/rstudio.deb && \
+      rm /tmp/rstudio.deb
+
 RUN mkdir -p /srv/jupyterhub/
 WORKDIR /srv/jupyterhub/
 
@@ -68,6 +74,7 @@ ENV NB_GROUP      jupyter
 ENV NB_GRANT_SUDO nopass
 ENV NB_PORT       8000
 ENV NB_VOLUME     /home/jupyter
+ENV RS_PORT       8888
 
 COPY entrypoint.sh /entrypoint.sh
 COPY adduser.sh /adduser.sh
